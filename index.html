@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модель організації інклюзивного навчання (3 клас НУШ)</title>
+    <!-- Підключення Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Підключення шрифтів Montserrat та Nunito з підтримкою кирилиці -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Іконки FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #FAF8F5; /* Ніжний кремово-бежевий фон */
+            color: #2D3134;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Плавна анімація появи блоків */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-view {
+            animation: fadeSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Режим підвищеної доступності (UDL демонстрація) */
+        body.a11y-high-contrast {
+            background-color: #FFFFFF !important;
+            color: #000000 !important;
+            font-size: 1.18rem !important;
+            line-height: 1.8 !important;
+            letter-spacing: 0.025em;
+        }
+
+        body.a11y-high-contrast .surface-card {
+            background-color: #FFFFFF !important;
+            border: 3px solid #111827 !important;
+            box-shadow: none !important;
+        }
+
+        body.a11y-high-contrast .soft-panel {
+            background-color: #F9FAFB !important;
+            border: 2px solid #374151 !important;
+        }
+
+        body.a11y-high-contrast .text-stone-600,
+        body.a11y-high-contrast .text-stone-500,
+        body.a11y-high-contrast .text-stone-700 {
+            color: #000000 !important;
+            font-weight: 600;
+        }
+
+        /* Приховування смуги прокрутки на мобільних */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-[#DCE7DF] selection:text-[#1F2D24]">
+
+    <!-- ВЕРХНЯ ПАНЕЛЬ (ШАПКА ПРЕЗЕНТАЦІЇ + UDL ІНСТРУМЕНТИ) -->
+    <header class="bg-white/95 backdrop-blur-sm border-b border-[#E8E2D9] sticky top-0 z-30 shadow-2xs surface-card">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <!-- Заголовок та підзаголовок -->
+                <div class="flex items-start sm:items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#6B8E78] to-[#87A994] text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <i class="fa-solid fa-seedling text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-[#E6EFE9] text-[#355240]">3 клас НУШ</span>
+                            <span class="px-2.5 py-0.5 text-xs font-bold rounded-full bg-[#F5ECD9] text-[#6E5323]">Інклюзивна педагогіка</span>
+                        </div>
+                        <h1 class="text-lg sm:text-2xl font-extrabold text-stone-900 tracking-tight mt-1">
+                            Власна модель організації інклюзивного навчання (3 клас НУШ)
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Панель доступності UDL: Перемикач контрасту/шрифту + Озвучування тексту -->
+                <div class="flex flex-wrap items-center gap-2.5 self-start lg:self-center shrink-0">
+                    <button id="a11yBtn" onclick="toggleHighContrast()"
+                        class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border-2 border-[#D7CFC3] bg-[#FAF8F5] hover:bg-[#F1ECE4] text-stone-800 font-bold text-xs sm:text-sm transition focus:outline-none focus:ring-2 focus:ring-[#6B8E78]"
+                        aria-pressed="false"
+                        title="Перемкнути режим підвищеної доступності (UDL)">
+                        <i class="fa-solid fa-universal-access text-[#52735E] text-base"></i>
+                        <span id="a11yBtnText">Звичайний вигляд</span>
+                    </button>
+
+                    <button id="ttsBtn" onclick="toggleReadCurrentSectionAloud()"
+                        class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#6B8E78] hover:bg-[#587864] text-white font-bold text-xs sm:text-sm transition shadow-2xs focus:outline-none focus:ring-2 focus:ring-[#6B8E78]"
+                        title="Прослухати або зупинити озвучення активного розділу вголос">
+                        <i id="ttsIcon" class="fa-solid fa-volume-high"></i>
+                        <span id="ttsBtnText">Озвучити блок</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- БЛОК «5 КЛЮЧОВИХ ПИТАНЬ — НАТИСНІТЬ ДЛЯ РОЗКРИТТЯ ВІДПОВІДІ» -->
+            <div class="mt-4 pt-3 border-t border-[#EFECE6]">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#6B8E78] animate-pulse"></span>
+                        <span class="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-[#355240]">
+                            5 ключових питань — натисніть для розкриття відповіді
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" id="discussionTabs">
+                    <!-- Вкладки рендеряться через JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Випадаюча картка розгорнутої відповіді на теоретичне питання -->
+        <div id="discussionDrawer" class="hidden bg-[#F3F7F4] border-t border-[#D6E2DA] px-4 sm:px-6 lg:px-8 py-5 transition-all shadow-inner">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start justify-between gap-4">
+                <div class="flex items-start gap-3.5 flex-1">
+                    <div class="w-10 h-10 rounded-xl bg-[#6B8E78] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h2 id="discussionDrawerTitle" class="font-extrabold text-stone-900 text-base sm:text-lg"></h2>
+                            <span id="discussionDrawerBadge" class="px-2.5 py-0.5 rounded-md bg-white border border-[#C6D6CC] text-[#355240] text-xs font-bold"></span>
+                        </div>
+                        <div id="discussionDrawerText" class="text-stone-700 text-sm sm:text-base mt-2 leading-relaxed space-y-2"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-start shrink-0">
+                    <button id="drawerSpeakBtn" onclick="speakDiscussionDrawer()"
+                        class="px-3.5 py-2 rounded-xl bg-white border border-[#C6D6CC] text-[#355240] hover:bg-[#E6EFE9] text-xs font-bold transition">
+                        <i class="fa-solid fa-volume-high mr-1"></i> Прослухати
+                    </button>
+                    <button onclick="closeDiscussionDrawer()"
+                        class="px-3.5 py-2 rounded-xl bg-white border border-stone-200 text-stone-600 hover:text-stone-900 text-xs font-bold transition">
+                        <i class="fa-solid fa-xmark mr-1"></i> Згорнути
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ОСНОВНИЙ КОНТЕНТ: ПАСПОРТ 3 КЛАСУ + 5 ПЕДАГОГІЧНИХ ВИКЛИКІВ -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ПАСПОРТ ІНКЛЮЗИВНОГО 3 КЛАСУ НУШ (КОНТЕКСТ МОДЕЛІ) -->
+        <section aria-label="Контекст 3 класу НУШ" class="mb-6 bg-white rounded-3xl border border-[#E6E0D6] p-4 sm:p-5 shadow-2xs surface-card">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#F5ECD9] text-[#8A6324] flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-chalkboard-user text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h2 class="font-extrabold text-stone-900 text-sm sm:text-base">Контекст педагогічної моделі: 3-Б клас НУШ (24 учні, 3 учні з ООП)</h2>
+                            <span class="px-2 py-0.5 rounded-md bg-[#EBF3EE] text-[#355240] text-xs font-bold">Команда: учитель + асистент учителя</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-stone-600 mt-1">
+                            Усі 5 педагогічних викликів розроблено з урахуванням реальних індивідуальних освітніх потреб трьох учнів класу:
+                        </p>
+                    </div>
+                </div>
+                <button onclick="toggleClassProfiles()" class="px-3.5 py-2 rounded-xl bg-[#FAF8F5] hover:bg-[#F2EDE4] border border-[#E0D8CC] text-xs font-extrabold text-stone-700 self-start lg:self-center shrink-0 transition">
+                    <i id="profilesToggleIcon" class="fa-solid fa-chevron-up mr-1"></i> <span id="profilesToggleText">Згорнути профілі учнів</span>
+                </button>
+            </div>
+
+            <div id="classProfilesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 pt-4 border-t border-[#F0ECE4]">
+                <div class="p-3.5 rounded-2xl bg-[#EBF3F9]/75 border border-[#C5DCEF] soft-panel">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-extrabold text-stone-900 text-sm">1. Марко (8 років) — РАС</span>
+                        <span class="px-2 py-0.5 rounded-md bg-white text-[#2C4E6E] text-[11px] font-bold">ІІ рівень підтримки</span>
+                    </div>
+                    <p class="text-xs text-stone-700 leading-relaxed">
+                        <strong>Особливості:</strong> висока сенсорна чутливість до шуму й різких змін, потреба у візуальній передбачуваності; сильна сторона — логічне мислення та зорова пам'ять.
+                    </p>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-[#FBF3E4]/80 border border-[#E8D5B0] soft-panel">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-extrabold text-stone-900 text-sm">2. Софійка (9 років) — Дислексія</span>
+                        <span class="px-2 py-0.5 rounded-md bg-white text-[#6E4D19] text-[11px] font-bold">ІІ рівень підтримки</span>
+                    </div>
+                    <p class="text-xs text-stone-700 leading-relaxed">
+                        <strong>Особливості:</strong> труднощі декодування дрібного тексту, плутання схожих літер, швидка втомлюваність при читанні; сильна сторона — розвинене усне мовлення й уява.
+                    </p>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-[#EBF3EE]/80 border border-[#C6D9CD] soft-panel">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="font-extrabold text-stone-900 text-sm">3. Данилко (8 років) — Інтелектуальні труднощі + СДУГ</span>
+                        <span class="px-2 py-0.5 rounded-md bg-white text-[#2F4A39] text-[11px] font-bold">ІІІ рівень підтримки</span>
+                    </div>
+                    <p class="text-xs text-stone-700 leading-relaxed">
+                        <strong>Особливості:</strong> імпульсивність, короткочасна концентрація уваги (7–10 хв), потреба у покроковому алгоритмі та практичних діях; сильна сторона — доброзичливість і рухливість.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Навігаційні картки 5 викликів -->
+        <section aria-label="5 педагогічних викликів учителя 3 класу" class="mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" id="challengesGrid">
+                <!-- Картки генеруються через JS -->
+            </div>
+        </section>
+
+        <!-- Активний модуль виклику -->
+        <section id="challengeStage" class="bg-white rounded-3xl border border-[#E6E0D6] shadow-xs p-5 sm:p-8 surface-card animate-view">
+            <!-- Вміст рендериться динамічно -->
+        </section>
+
+    </main>
+
+    <!-- НИЖНЯ НАВІГАЦІЙНА ПАНЕЛЬ -->
+    <footer class="bg-white border-t border-[#E8E2D9] py-4 mt-8 surface-card">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-stone-600">
+            <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-[#F5ECD9] text-[#6E5323] font-bold text-xs">3 КЛАС НУШ</span>
+                <span class="font-semibold text-stone-700">Модель організації інклюзивного освітнього процесу</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button onclick="stepChallenge(-1)" class="px-4 py-2 rounded-xl border border-[#D7CFC3] hover:bg-[#FAF8F5] text-stone-800 font-bold text-xs sm:text-sm transition">
+                    <i class="fa-solid fa-arrow-left mr-1.5"></i> Попередній виклик
+                </button>
+                <button onclick="stepChallenge(1)" class="px-4 py-2 rounded-xl bg-[#6B8E78] hover:bg-[#587864] text-white font-bold text-xs sm:text-sm transition">
+                    Наступний виклик <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT ЛОГІКА -->
+    <script>
+        // ==========================================
+        // 1. ДАНІ: 5 КЛЮЧОВИХ ПИТАНЬ (РОЗГОРНУТІ ВІДПОВІДІ)
+        // ==========================================
+        const discussionItems = [
+            {
+                id: 1,
+                pill: "1. Професійні компетентності",
+                badge: "Професійний стандарт учителя НУШ",
+                title: "1. Професійні компетентності вчителя інклюзивного класу",
+                plainText: "Професійні компетентності вчителя інклюзивного класу охоплюють діагностико-прогностичну, проєктувальну за принципами універсального дизайну в навчанні, дидактично-адаптаційну, комунікативно-партнерську та рефлексивну компетентності, а також емоційну стійкість педагога.",
+                html: `
+                    <p>Сучасний учитель інклюзивного 3 класу НУШ поєднує предметну майстерність із глибоким розумінням індивідуального розвитку дитини через п'ять ключових компетентностей:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><strong>Діагностико-прогностична:</strong> уміння виявляти не лише освітні труднощі, а й <em>сильні сторони, інтереси та зону найближчого розвитку</em> кожного третьокласника.</li>
+                        <li><strong>Проєктувальна (UDL):</strong> здатність конструювати урок за принципами Універсального дизайну в навчанні, усуваючи бар'єри ще на етапі планування.</li>
+                        <li><strong>Дидактично-адаптаційна:</strong> володіння техніками <em>адаптації</em> (зміна способу подачі, часу, формату без зниження вимог стандарту) та <em>модифікації</em> (спрощення змісту відповідно до ІПР).</li>
+                        <li><strong>Комунікативно-партнерська:</strong> готовність до спільного викладання з асистентом учителя, конструктивної взаємодії з батьками та фахівцями ІРЦ.</li>
+                        <li><strong>Емоційна стійкість та рефлексія:</strong> здатність зберігати спокій у кризових ситуаціях, запобігати професійному вигоранню й гнучко коригувати власні педагогічні рішення.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 2,
+                pill: "2. Педагогічна етика",
+                badge: "Принцип «Людина передусім»",
+                title: "2. Педагогічна етика та недискримінаційний підхід до навчання дітей з ООП",
+                plainText: "Педагогічна етика базується на принципі людина передусім, презумпції компетентності кожної дитини, безумовному прийнятті, конфіденційності даних індивідуальної програми розвитку та створенні середовища без навішування ярликів.",
+                html: `
+                    <p>Етична культура вчителя визначає ставлення всього дитячого колективу 3 класу до різноманіття:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><strong>Коректна термінологія (Person-First Language):</strong> фокус на особистості дитини, а не на діагнозі («учень з особливими освітніми потребами», «дитина з порушеннями зору», а не «інклюзивна дитина» чи «аутист»).</li>
+                        <li><strong>Презумпція компетентності:</strong> віра в те, що кожен учень може навчатися й досягати успіху за умови правильно дібраних засобів підтримки.</li>
+                        <li><strong>Недискримінація та рівність можливостей:</strong> надання дитині необхідної підтримки (візуального розкладу, навушників, додаткового часу) розглядається не як «привілей», а як <em>забезпечення рівного старту</em>.</li>
+                        <li><strong>Конфіденційність та повага до гідності:</strong> медичні висновки та зміст ІПР обговорюються виключно в межах команди супроводу, без публічного оцінювання труднощів дитини при класі.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 3,
+                pill: "3. Профілактика булінгу",
+                badge: "Безпечне освітнє середовище",
+                title: "3. Стратегії запобігання конфліктам, булінгу та соціальній ізоляції учнів",
+                plainText: "Запобігання булінгу та соціальній ізоляції в третьому класі здійснюється через щоденні ранкові зустрічі, кооперативне навчання в малих групах, розвиток емпатії, чіткі візуальні правила класу та відновні практики медіації вчителя.",
+                html: `
+                    <p>У 3 класі (8–9 років) зростає значущість думки однолітків, тому профілактика ізоляції має бути системною та проактивною:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><strong>Формування культури прийняття різноманіття:</strong> проведення інтерактивних уроків емпатії («Усі ми різні — усі ми рівні»), обговорення того, що кожен має різні способи сприйняття світу.</li>
+                        <li><strong>Кооперативне навчання замість жорсткої конкуренції:</strong> робота в малих гетерогенних групах, де кожен учень має чітку роль (наприклад, Марко відповідає за схему, Софійка — за усну презентацію, Данилко — за добір карток).</li>
+                        <li><strong>Програма «Коло дружби» та наставництво:</strong> добровільна взаємопідтримка однокласників на перервах та під час спільних проєктів.</li>
+                        <li><strong>Раннє виявлення та відновна медіація:</strong> негайне, тактовне реагування вчителя на насмішки чи відчуження через «Я-повідомлення» та спільний пошук правил безпечної взаємодії.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 4,
+                pill: "4. Формувальне оцінювання",
+                badge: "Оцінювання для навчання (НУШ)",
+                title: "4. Формувальне оцінювання навчальних досягнень дітей з ООП",
+                plainText: "Формувальне оцінювання дітей з ООП спрямоване на відстеження індивідуальної динаміки прогресу учня відносно його власних попередніх результатів, надання підтримувального зворотного зв'язку, самооцінювання та ведення Портфоліо успіху.",
+                html: `
+                    <p>У 3 класі НУШ формувальне оцінювання є інструментом підтримки мотивації та віри у власні сили:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><strong>Принцип індивідуальної норми:</strong> досягнення дитини порівнюються виключно з її власними попередніми результатами («Сьогодні ти виконав 4 завдання самостійно, а минулого тижня — 2»), без рейтингування в класі.</li>
+                        <li><strong>Орієнтація на очікувані результати ІПР:</strong> критерії оцінювання адаптуються відповідно до індивідуальних цілей (оцінюється суть знань, а не каліграфія чи швидкість письма).</li>
+                        <li><strong>Конструктивний зворотний зв'язок (формула «2 зірки і 1 побажання»):</strong> спочатку фіксуються дві конкретні вдалі дії учня, а потім дається одна посильна порада для покращення.</li>
+                        <li><strong>Залучення учня до рефлексії:</strong> використання візуальних шкал самооцінювання («Сходинки росту», світлофор розуміння) та наповнення індивідуального «Портфоліо успіху».</li>
+                    </ul>
+                `
+            },
+            {
+                id: 5,
+                pill: "5. Співпраця в команді",
+                badge: "Команда психолого-педагогічного супроводу",
+                title: "5. Особливості співпраці з батьками та командою психолого-педагогічного супроводу",
+                plainText: "Співпраця з батьками та командою супроводу ґрунтується на партнерстві, спільному розробленні та перегляді Індивідуальної програми розвитку, чіткому розподілі ролей між учителем і асистентом учителя та синхронізації корекційної роботи фахівців.",
+                html: `
+                    <p>Індивідуальна підтримка учня 3 класу ефективна лише за умови узгодженої командної роботи:</p>
+                    <ul class="list-disc pl-5 space-y-1 text-sm">
+                        <li><strong>Батьки як рівноправні партнери:</strong> залучення родини до складання ІПР як головних експертів своєї дитини; регулярний обмін позитивними спостереженнями («Зошит успіхів»), а не лише повідомленнями про труднощі.</li>
+                        <li><strong>Тандем «Учитель — Асистент учителя»:</strong> спільне тижневе планування уроків, чіткий розподіл функцій (учитель керує навчальним процесом класу, асистент забезпечує індивідуальну підтримку, візуальні опори та адаптацію темпу).</li>
+                        <li><strong>Міждисциплінарна синхронізація:</strong> узгодження корекційно-розвиткових цілей практичного психолога, вчителя-логопеда та дефектолога з темами уроків 3 класу.</li>
+                        <li><strong>Регулярний моніторинг ІПР:</strong> засідання команди супроводу (не рідше 3 разів на навчальний рік) для оцінки ефективності стратегій підтримки та їх своєчасного коригування.</li>
+                    </ul>
+                `
+            }
+        ];
+
+        // ==========================================
+        // 2. ДАНІ: 5 ПЕДАГОГІЧНИХ ВИКЛИКІВ (3 КЛАС)
+        // ==========================================
+        const challengesList = [
+            {
+                id: 0,
+                badge: "Виклик 1",
+                title: "Доступне середовище",
+                desc: "Фізичний, психологічний та інформаційний простір 3 класу",
+                icon: "fa-school",
+                bgSoft: "bg-[#EBF3EE]",
+                borderActive: "border-[#6B8E78]",
+                iconColor: "text-[#4D6E59]",
+                badgeClass: "bg-[#DCE8E0] text-[#2F4A39]"
+            },
+            {
+                id: 1,
+                badge: "Виклик 2",
+                title: "Вправа з укр. мови",
+                desc: "3 клас: «Спільнокореневі слова та форми слова» (UDL)",
+                icon: "fa-spell-check",
+                bgSoft: "bg-[#FBF3E4]",
+                borderActive: "border-[#D4A359]",
+                iconColor: "text-[#9C6F29]",
+                badgeClass: "bg-[#F5E6C8] text-[#6E4D19]"
+            },
+            {
+                id: 2,
+                badge: "Виклик 3",
+                title: "Алгоритм у кризі",
+                desc: "6 кроків дій учителя 3 класу під час зриву на уроці",
+                icon: "fa-hand-holding-heart",
+                bgSoft: "bg-[#EBF3F9]",
+                borderActive: "border-[#6B9AC4]",
+                iconColor: "text-[#45729B]",
+                badgeClass: "bg-[#DCEAF5] text-[#2C4E6E]"
+            },
+            {
+                id: 3,
+                badge: "Виклик 4",
+                title: "Команда супроводу",
+                desc: "Матриця ролей: учитель, асистент, батьки та фахівці",
+                icon: "fa-people-arrows",
+                bgSoft: "bg-[#F2EFF8]",
+                borderActive: "border-[#8E7DBE]",
+                iconColor: "text-[#635294]",
+                badgeClass: "bg-[#E5DFF2] text-[#44366B]"
+            },
+            {
+                id: 4,
+                badge: "Виклик 5",
+                title: "Оцінювання прогресу",
+                desc: "Адаптовані результати ІПР, «Сходинки росту» та Портфоліо",
+                icon: "fa-stairs",
+                bgSoft: "bg-[#F9ECEC]",
+                borderActive: "border-[#C97B7B]",
+                iconColor: "text-[#994C4C]",
+                badgeClass: "bg-[#F2DADA] text-[#6E3232]"
+            }
+        ];
+
+        // Стан презентації
+        let appState = {
+            activeDiscussionId: null,
+            activeChallengeId: 0,
+            highContrast: false,
+            isSpeaking: false,
+            profilesVisible: true,
+            // Виклик 1
+            envDimension: 'physical',
+            selectedEmotion: 'calm',
+            // Виклик 2 (Вправа для 3 класу: Спільнокореневі слова)
+            udlLevel: 'interactive', // 'basic' | 'visual' | 'interactive'
+            selectedRow1: null,
+            selectedRow2: null,
+            // Виклик 3 (Алгоритм 6 кроків)
+            crisisStepIndex: 0,
+            // Виклик 4 (Команда супроводу)
+            selectedMember: 'teacher',
+            // Виклик 5 (Оцінювання та Сходинки росту)
+            selectedStudentProfile: 'marko', // 'marko' | 'sofiika' | 'danylko'
+            growthStep: 2 // 1, 2 або 3
+        };
+
+        // ==========================================
+        // 3. ІНІЦІАЛІЗАЦІЯ ТА ДОСТУПНІСТЬ (UDL)
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDiscussionTabs();
+            renderChallengesGrid();
+            renderChallengeStage();
+        });
+
+        function toggleClassProfiles() {
+            appState.profilesVisible = !appState.profilesVisible;
+            const grid = document.getElementById('classProfilesGrid');
+            const icon = document.getElementById('profilesToggleIcon');
+            const text = document.getElementById('profilesToggleText');
+            if (appState.profilesVisible) {
+                grid.classList.remove('hidden');
+                icon.className = 'fa-solid fa-chevron-up mr-1';
+                text.textContent = 'Згорнути профілі учнів';
+            } else {
+                grid.classList.add('hidden');
+                icon.className = 'fa-solid fa-chevron-down mr-1';
+                text.textContent = 'Показати профілі учнів';
+            }
+        }
+
+        function toggleHighContrast() {
+            appState.highContrast = !appState.highContrast;
+            document.body.classList.toggle('a11y-high-contrast', appState.highContrast);
+            const btn = document.getElementById('a11yBtn');
+            const label = document.getElementById('a11yBtnText');
+            btn.setAttribute('aria-pressed', appState.highContrast);
+
+            if (appState.highContrast) {
+                label.textContent = "Режим підвищеної доступності (УВІМК)";
+                btn.classList.add('bg-[#F5E6C8]', 'border-stone-900', 'text-black');
+            } else {
+                label.textContent = "Звичайний вигляд";
+                btn.classList.remove('bg-[#F5E6C8]', 'border-stone-900', 'text-black');
+            }
+        }
+
+        function updateTtsButtonUI(speaking) {
+            appState.isSpeaking = speaking;
+            const btn = document.getElementById('ttsBtn');
+            const icon = document.getElementById('ttsIcon');
+            const text = document.getElementById('ttsBtnText');
+            if (!btn) return;
+
+            if (speaking) {
+                icon.className = 'fa-solid fa-stop';
+                text.textContent = 'Зупинити озвучення';
+                btn.classList.remove('bg-[#6B8E78]', 'hover:bg-[#587864]');
+                btn.classList.add('bg-[#C97B7B]', 'hover:bg-[#B36666]');
+            } else {
+                icon.className = 'fa-solid fa-volume-high';
+                text.textContent = 'Озвучити блок';
+                btn.classList.remove('bg-[#C97B7B]', 'hover:bg-[#B36666]');
+                btn.classList.add('bg-[#6B8E78]', 'hover:bg-[#587864]');
+            }
+        }
+
+        // Озвучування довільного тексту українською мовою через Web Speech API
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'uk-UA';
+            utterance.rate = 0.95;
+            utterance.onstart = () => updateTtsButtonUI(true);
+            utterance.onend = () => updateTtsButtonUI(false);
+            utterance.onerror = () => updateTtsButtonUI(false);
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleReadCurrentSectionAloud() {
+            if (appState.isSpeaking && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                updateTtsButtonUI(false);
+                return;
+            }
+            const summaries = [
+                "Виклик перший. Доступне освітнє середовище у третьому Б класі. Фізична доступність із зоною тиші для Марка, психологічна безпека з термометром емоцій та інформаційна доступність зі збільшеним шрифтом для Софійки та візуальними алгоритмами для Данилка.",
+                "Виклик другий. Навчальна вправа з української мови для третього класу за темою Спільнокореневі слова та форми слова. Три рівноцінні способи доступу: базовий письмовий, візуально-опорний із виділенням кореня та інтерактивний тренажер із голосовою підтримкою.",
+                "Виклик третій. Алгоритм дій учителя третього класу під час сенсорного перевантаження та емоційного зриву Марка на груповому квесті. Шість послідовних кроків педагогічної підтримки.",
+                "Виклик четвертий. Організація співпраці в команді психолого-педагогічного супроводу: матриця розподілу ролей на уроці між учителем і асистентом учителя, партнерство з батьками та синхронізація роботи психолога й логопеда.",
+                "Виклик п'ятий. Оцінювання індивідуального прогресу учнів третього класу з урахуванням їхніх можливостей, адаптованих очікуваних результатів ІПР, сходинок росту та Портфоліо успіху."
+            ];
+            speakText(summaries[appState.activeChallengeId]);
+        }
+
+        // ==========================================
+        // 4. КЕРУВАННЯ ВКЛАДКАМИ ОБГОВОРЕННЯ
+        // ==========================================
+        function renderDiscussionTabs() {
+            const container = document.getElementById('discussionTabs');
+            container.innerHTML = discussionItems.map(item => {
+                const isOpen = appState.activeDiscussionId === item.id;
+                return `
+                    <button onclick="toggleDiscussion(${item.id})"
+                        aria-expanded="${isOpen}"
+                        class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition border flex items-center gap-1.5 ${
+                            isOpen
+                            ? 'bg-[#6B8E78] text-white border-[#6B8E78] shadow-2xs'
+                            : 'bg-[#FAF8F5] hover:bg-[#EBF3EE] text-stone-700 border-[#E2DCD2]'
+                        }">
+                        <span>${item.pill}</span>
+                        <i class="fa-solid ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'} text-[10px] opacity-80"></i>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleDiscussion(id) {
+            const drawer = document.getElementById('discussionDrawer');
+            if (appState.activeDiscussionId === id) {
+                closeDiscussionDrawer();
+                return;
+            }
+            appState.activeDiscussionId = id;
+            const found = discussionItems.find(d => d.id === id);
+            document.getElementById('discussionDrawerTitle').textContent = found.title;
+            document.getElementById('discussionDrawerBadge').textContent = found.badge;
+            document.getElementById('discussionDrawerText').innerHTML = found.html;
+            drawer.classList.remove('hidden');
+            renderDiscussionTabs();
+        }
+
+        function speakDiscussionDrawer() {
+            if (!appState.activeDiscussionId) return;
+            const found = discussionItems.find(d => d.id === appState.activeDiscussionId);
+            if (found) speakText(found.plainText);
+        }
+
+        function closeDiscussionDrawer() {
+            appState.activeDiscussionId = null;
+            document.getElementById('discussionDrawer').classList.add('hidden');
+            renderDiscussionTabs();
+        }
+
+        // ==========================================
+        // 5. НАВІГАЦІЯ МІЖ 5 ПЕДАГОГІЧНИМИ ВИКЛИКАМИ
+        // ==========================================
+        function renderChallengesGrid() {
+            const grid = document.getElementById('challengesGrid');
+            grid.innerHTML = challengesList.map(ch => {
+                const isSelected = appState.activeChallengeId === ch.id;
+                return `
+                    <button onclick="selectChallenge(${ch.id})"
+                        class="text-left p-4 rounded-2xl border-2 transition-all flex flex-col justify-between surface-card ${
+                            isSelected
+                            ? `${ch.bgSoft} ${ch.borderActive} shadow-xs scale-[1.01]`
+                            : 'bg-white border-[#E6E0D6] hover:border-[#C9C0B1] hover:bg-[#FCFBF9]'
+                        }">
+                        <div class="flex items-center justify-between w-full mb-2.5">
+                            <span class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold ${ch.badgeClass}">
+                                ${ch.badge}
+                            </span>
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center ${isSelected ? 'bg-white shadow-2xs' : 'bg-[#FAF8F5]'} ${ch.iconColor}">
+                                <i class="fa-solid ${ch.icon}"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-stone-900 text-sm sm:text-base leading-snug">${ch.title}</h3>
+                            <p class="text-xs text-stone-600 mt-1 line-clamp-2">${ch.desc}</p>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectChallenge(id) {
+            appState.activeChallengeId = id;
+            renderChallengesGrid();
+            renderChallengeStage();
+        }
+
+        function stepChallenge(dir) {
+            let next = appState.activeChallengeId + dir;
+            if (next < 0) next = challengesList.length - 1;
+            if (next >= challengesList.length) next = 0;
+            selectChallenge(next);
+        }
+
+        function renderChallengeStage() {
+            const stage = document.getElementById('challengeStage');
+            stage.classList.remove('animate-view');
+            void stage.offsetWidth;
+            stage.classList.add('animate-view');
+
+            switch (appState.activeChallengeId) {
+                case 0: stage.innerHTML = buildChallenge1(); break;
+                case 1: stage.innerHTML = buildChallenge2(); break;
+                case 2: stage.innerHTML = buildChallenge3(); break;
+                case 3: stage.innerHTML = buildChallenge4(); break;
+                case 4: stage.innerHTML = buildChallenge5(); break;
+            }
+        }
+
+        // ==========================================
+        // ВИКЛИК 1: ДОСТУПНЕ ОСВІТНЄ СЕРЕДОВИЩЕ (3 КЛАС)
+        // ==========================================
+        function setEnvDimension(dim) {
+            appState.envDimension = dim;
+            renderChallengeStage();
+        }
+
+        function setEmotionPreview(em) {
+            appState.selectedEmotion = em;
+            renderChallengeStage();
+        }
+
+        function buildChallenge1() {
+            const dimensions = {
+                physical: {
+                    title: "Фізична доступність та сенсорна ергономіка 3 класу",
+                    subtitle: "Простір класної кімнати організовано без фізичних і сенсорних бар'єрів з урахуванням потреб Марка (РАС), Софійки (дислексія) та Данилка (СДУГ).",
+                    items: [
+                        {
+                            icon: "fa-border-all",
+                            title: "Зонування та «Зона тиші» (для Марка та всіх учнів)",
+                            text: "Поділ класу на навчальний сектор, килимок для групової роботи та відокремлений куточок тиші (м'який пуф за ширмою, шумопоглинаючі навушники, тактильні подушки) для сенсорного розвантаження."
+                        },
+                        {
+                            icon: "fa-arrows-left-right-to-line",
+                            title: "Продумане розміщення парт (для Данилка і Софійки)",
+                            text: "Широкі проходи (від 90 см), одномісні парти НУШ. Данилко сидить на першій парті середнього ряду (мінімум відволікаючих стимулів), Софійка — у зоні оптимального природного освітлення без відблисків."
+                        },
+                        {
+                            icon: "fa-tape",
+                            title: "Візуально-тактильні маркери простору",
+                            text: "Контрастне маркування меж функціональних осередків, підписані піктограмами контейнери для навчального приладдя, що розвиває самостійність усіх третьокласників."
+                        }
+                    ],
+                    interactiveWidget: `
+                        <div class="mt-6 p-4 rounded-2xl bg-[#EBF3EE]/70 border border-[#C6D9CD] soft-panel">
+                            <div class="text-xs font-extrabold uppercase text-[#2F4A39] mb-2">
+                                <i class="fa-solid fa-map-location-dot mr-1"></i> Карта-схема осередків 3-Б класу (Універсальний дизайн)
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-bold text-center">
+                                <div class="p-3 rounded-xl bg-white border border-[#C6D9CD] text-stone-800">
+                                    <div class="text-lg mb-1">🖥️</div>
+                                    Осередок відкриттів<br><span class="font-normal text-stone-500">Дошка + візуальний розклад</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-white border border-[#C6D9CD] text-stone-800">
+                                    <div class="text-lg mb-1">🪑</div>
+                                    Навчальні парти<br><span class="font-normal text-stone-500">Зональна посадка + простір</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-white border border-[#C6D9CD] text-stone-800">
+                                    <div class="text-lg mb-1">🧩</div>
+                                    Осередок співпраці<br><span class="font-normal text-stone-500">Килимок для малих груп</span>
+                                </div>
+                                <div class="p-3 rounded-xl bg-white border border-[#C6D9CD] text-stone-800">
+                                    <div class="text-lg mb-1">🎧</div>
+                                    Зона тиші та ресурсу<br><span class="font-normal text-stone-500">Пуф, навушники, антистрес</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                psychological: {
+                    title: "Психологічна безпека та емоційний комфорт у 3 класі",
+                    subtitle: "Формування приймаючого дитячого колективу, де кожен учень почувається захищеним, а емоційна напруга розпізнається вчасно.",
+                    items: [
+                        {
+                            icon: "fa-temperature-half",
+                            title: "Настінний «Термометр емоцій»",
+                            text: "Учні 3 класу без слів позначають свій стан прищіпкою біля відповідної картки. Це дозволяє вчителю та асистенту вчасно помітити перевтому Марка чи тривогу Софійки до початку зриву."
+                        },
+                        {
+                            icon: "fa-icons",
+                            title: "Спільні правила класу у піктограмах",
+                            text: "Позитивно сформульовані правила 3 класу («Слухаємо одне одного», «Поважаємо особистий простір», «Допомагаємо словами підтримки»), створені разом з учнями на початку року."
+                        },
+                        {
+                            icon: "fa-hand-sparkles",
+                            title: "Ранкові зустрічі та ритуали переходу",
+                            text: "Щоденне 10-хвилинне ранкове коло з вибором привітання та спокійний візуально-звуковий сигнал (пісочний годинник / дзвіночок) за 2 хвилини до зміни виду діяльності."
+                        }
+                    ],
+                    interactiveWidget: `
+                        <div class="mt-6 p-4 rounded-2xl bg-[#EBF3F9]/80 border border-[#C5DCEF] soft-panel">
+                            <div class="text-xs font-extrabold uppercase text-[#2C4E6E] mb-2">
+                                <i class="fa-solid fa-face-smile-beam mr-1"></i> Інтерактивний «Термометр емоцій» 3 класу (натисніть для прикладу дії вчителя):
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                                <button onclick="setEmotionPreview('calm')" class="p-3 rounded-xl border-2 text-left transition ${appState.selectedEmotion === 'calm' ? 'bg-white border-emerald-500 shadow-2xs' : 'bg-white/75 border-stone-200'}">
+                                    <div class="font-bold text-sm text-stone-900">🟢 Спокійний / Готовий</div>
+                                    <div class="text-xs text-stone-500">Зелена зона ресурсу</div>
+                                </button>
+                                <button onclick="setEmotionPreview('tired')" class="p-3 rounded-xl border-2 text-left transition ${appState.selectedEmotion === 'tired' ? 'bg-white border-amber-500 shadow-2xs' : 'bg-white/75 border-stone-200'}">
+                                    <div class="font-bold text-sm text-stone-900">🟡 Хвилююся / Втомився</div>
+                                    <div class="text-xs text-stone-500">Жовта зона попередження</div>
+                                </button>
+                                <button onclick="setEmotionPreview('overload')" class="p-3 rounded-xl border-2 text-left transition ${appState.selectedEmotion === 'overload' ? 'bg-white border-rose-500 shadow-2xs' : 'bg-white/75 border-stone-200'}">
+                                    <div class="font-bold text-sm text-stone-900">🔴 Перевантажений</div>
+                                    <div class="text-xs text-stone-500">Червона зона стоп-сигналу</div>
+                                </button>
+                            </div>
+                            <div class="mt-3 p-3 rounded-xl bg-white border border-[#C5DCEF] text-xs sm:text-sm font-semibold text-stone-800">
+                                ${appState.selectedEmotion === 'calm' ? '✅ Дія вчителя: підтримуємо робочий темп, пропонуємо завдання базового або творчого рівня.' : appState.selectedEmotion === 'tired' ? '⚡ Дія вчителя: пропонуємо Данилку або Софійці 2-хвилинну рухову/очну паузу, зменшуємо обсяг завдання.' : '🛡️ Дія вчителя: асистент спокійно супроводжує Марка у «Зону тиші» на 5 хвилин до стабілізації стану.'}
+                            </div>
+                        </div>
+                    `
+                },
+                information: {
+                    title: "Інформаційна доступність (мультимодальна подача)",
+                    subtitle: "Навчальна інформація подається одночасно через візуальний, аудіальний та алгоритмічний канали сприйняття.",
+                    items: [
+                        {
+                            icon: "fa-list-check",
+                            title: "Візуальний розклад уроку (для Марка та Данилка)",
+                            text: "На магнітній дошці розміщено картки етапів уроку (1. Ранкове коло → 2. Досліджуємо слова → 3. Руханка → 4. Тренажер → 5. Сходинки росту). Виконаний етап перевертається."
+                        },
+                        {
+                            icon: "fa-font",
+                            title: "Дислексія-дружній формат текстів (для Софійки)",
+                            text: "Усі роздаткові картки надруковано шрифтом без засічок (Nunito / Verdana, кегль 16–18 pt) на папері кремового відтінку (без сліпучо-білого контрасту) зі збільшеним міжлітерним інтервалом."
+                        },
+                        {
+                            icon: "fa-qrcode",
+                            title: "QR-коди з аудіоінструкціями та чек-листами",
+                            text: "Кожна картка містить QR-код для прослуховування завдання на планшеті в навушниках та короткий покроковий алгоритм «Крок 1 — Крок 2 — Крок 3»."
+                        }
+                    ],
+                    interactiveWidget: `
+                        <div class="mt-6 p-4 rounded-2xl bg-[#FBF3E4]/80 border border-[#E8D5B0] soft-panel">
+                            <div class="text-xs font-extrabold uppercase text-[#6E4D19] mb-2">
+                                <i class="fa-solid fa-calendar-days mr-1"></i> Приклад візуального розкладу уроку української мови (3 клас):
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                                <span class="px-3 py-2 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300">✓ 1. Привітання</span>
+                                <i class="fa-solid fa-arrow-right text-stone-400"></i>
+                                <span class="px-3 py-2 rounded-xl bg-white text-stone-900 border-2 border-[#D4A359] shadow-2xs">▶ 2. Спільнокореневі слова</span>
+                                <i class="fa-solid fa-arrow-right text-stone-400"></i>
+                                <span class="px-3 py-2 rounded-xl bg-white/70 text-stone-600 border border-stone-200">3. Нейрогімнастика (2 хв)</span>
+                                <i class="fa-solid fa-arrow-right text-stone-400"></i>
+                                <span class="px-3 py-2 rounded-xl bg-white/70 text-stone-600 border border-stone-200">4. Робота за вибором</span>
+                                <i class="fa-solid fa-arrow-right text-stone-400"></i>
+                                <span class="px-3 py-2 rounded-xl bg-white/70 text-stone-600 border border-stone-200">5. Сходинки росту</span>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            const activeDim = dimensions[appState.envDimension];
+
+            return `
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-[#EFECE6]">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-[#DCE8E0] text-[#2F4A39] mb-2">
+                            <i class="fa-solid fa-school"></i> Виклик 1 • Доступне середовище (3 клас НУШ)
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-stone-900">Організація доступного освітнього середовища</h2>
+                        <p class="text-stone-600 text-sm sm:text-base mt-1">Оберіть вимір середовища, щоб переглянути практичні рішення для 3 класу та інтерактивні приклади:</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 bg-[#F5F2EC] p-1.5 rounded-2xl self-start lg:self-center">
+                        <button onclick="setEnvDimension('physical')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${appState.envDimension === 'physical' ? 'bg-white text-[#355240] shadow-2xs' : 'text-stone-600 hover:text-stone-900'}">
+                            <i class="fa-solid fa-chair mr-1"></i> Фізична доступність
+                        </button>
+                        <button onclick="setEnvDimension('psychological')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${appState.envDimension === 'psychological' ? 'bg-white text-[#45729B] shadow-2xs' : 'text-stone-600 hover:text-stone-900'}">
+                            <i class="fa-solid fa-heart mr-1"></i> Психологічна безпека
+                        </button>
+                        <button onclick="setEnvDimension('information')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${appState.envDimension === 'information' ? 'bg-white text-[#9C6F29] shadow-2xs' : 'text-stone-600 hover:text-stone-900'}">
+                            <i class="fa-solid fa-eye mr-1"></i> Інформаційна доступність
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E2D9] mb-6 soft-panel">
+                        <h3 class="font-bold text-lg text-stone-900">${activeDim.title}</h3>
+                        <p class="text-stone-600 text-sm sm:text-base mt-1">${activeDim.subtitle}</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        ${activeDim.items.map(item => `
+                            <div class="p-5 rounded-2xl border border-[#E6E0D6] bg-white hover:border-[#87A994] transition soft-panel">
+                                <div class="w-11 h-11 rounded-xl bg-[#EBF3EE] text-[#4D6E59] flex items-center justify-center text-lg mb-3.5">
+                                    <i class="fa-solid ${item.icon}"></i>
+                                </div>
+                                <h4 class="font-bold text-stone-900 text-base mb-2">${item.title}</h4>
+                                <p class="text-stone-600 text-sm leading-relaxed">${item.text}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${activeDim.interactiveWidget}
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // ВИКЛИК 2: ВПРАВА З УКР. МОВИ ДЛЯ 3 КЛАСУ
+        // Тема: «Спільнокореневі слова та форми слова»
+        // ==========================================
+        function setUdlLevel(lvl) {
+            appState.udlLevel = lvl;
+            renderChallengeStage();
+        }
+
+        function checkOddWord(rowNum, word, isOdd, explanation) {
+            if (rowNum === 1) {
+                appState.selectedRow1 = { word, isOdd, explanation };
+            } else {
+                appState.selectedRow2 = { word, isOdd, explanation };
+            }
+            speakText(explanation);
+            renderChallengeStage();
+        }
+
+        function resetOddWordExercise() {
+            appState.selectedRow1 = null;
+            appState.selectedRow2 = null;
+            renderChallengeStage();
+        }
+
+        function buildChallenge2() {
+            const row1Words = [
+                { word: "ліс", root: "ліс", suffix: "", emoji: "🌲", hint: "невеликий ліс", isOdd: false, msg: "Слово «ліс» має корінь -ліс- і пов'язане з деревами. Пошукай слово з іншим значенням!" },
+                { word: "лісовий", root: "ліс", suffix: "овий", emoji: "🌳", hint: "який? пов'язаний із лісом", isOdd: false, msg: "Слово «лісовий» — спільнокореневе до слова «ліс». Спробуй інше слово!" },
+                { word: "лісник", root: "ліс", suffix: "ник", emoji: "🧑‍🌾", hint: "людина, яка доглядає ліс", isOdd: false, msg: "«Лісник» охороняє ліс, це спільнокореневе слово. Подивись на четверте слово!" },
+                { word: "лисиця", root: "лис", suffix: "иця", emoji: "🦊", hint: "руда хижа тварина", isOdd: true, msg: "Чудово! Слово «лисиця» зайве: воно має інше значення (тварина), хоч і звучить схоже!" }
+            ];
+
+            const row2Words = [
+                { word: "вода", root: "вод", suffix: "а", emoji: "💧", hint: "прозора рідина", isOdd: false, msg: "«Вода» — основне слово ряду. Знайди слово, яке означає не воду, а професію!" },
+                { word: "водний", root: "вод", suffix: "ний", emoji: "🌊", hint: "пов'язаний із водою", isOdd: false, msg: "«Водний» — спільнокореневе слово до «вода». Спробуй інший варіант!" },
+                { word: "водій", root: "вод", suffix: "ій", emoji: "🚌", hint: "людина, яка водить авто", isOdd: true, msg: "Молодець! Слово «водій» зайве, бо воно походить від слова «водити» (кермувати), а не від «вода»!" },
+                { word: "водичка", root: "вод", suffix: "ичка", emoji: "🚰", hint: "лагідно про воду", isOdd: false, msg: "«Водичка» — це лагідна назва води, спільнокореневе слово. Пошукай ще!" }
+            ];
+
+            let panelHtml = '';
+
+            if (appState.udlLevel === 'basic') {
+                panelHtml = `
+                    <div class="p-6 rounded-2xl bg-[#FBF3E4]/60 border border-[#E8D5B0] soft-panel">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-[#F5E6C8] text-[#6E4D19] text-xs font-extrabold">Рівень 1: Базовий (текстовий)</span>
+                            <span class="text-xs font-semibold text-stone-500">Для учнів 3 класу зі сформованою навичкою читання та письма</span>
+                        </div>
+                        <p class="font-bold text-stone-900 mb-2">Інструкція на картці:</p>
+                        <p class="text-stone-700 text-sm sm:text-base mb-4">
+                            Прочитай кожен рядок слів. Спиши в зошит лише <strong>спільнокореневі слова</strong>, познач у них корінь. Зайве слово підкресли олівцем.
+                        </p>
+                        <div class="space-y-3 bg-white p-4 rounded-2xl border border-[#E6E0D6] text-stone-800 font-semibold text-base">
+                            <div>1) Ліс, лісовий, лісник, лисиця.</div>
+                            <div>2) Вода, водний, водій, водичка.</div>
+                        </div>
+                    </div>
+                `;
+            } else if (appState.udlLevel === 'visual') {
+                panelHtml = `
+                    <div class="p-6 rounded-2xl bg-[#EBF3F9]/70 border border-[#C5DCEF] soft-panel">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-[#DCEAF5] text-[#2C4E6E] text-xs font-extrabold">Рівень 2: Візуально-опорний (для учнів з ООП / дислексією)</span>
+                            <span class="text-xs font-semibold text-stone-500">Кольорове виділення кореня + смислові піктограми</span>
+                        </div>
+                        <p class="text-stone-700 text-sm sm:text-base mb-4">
+                            <strong>Адаптація:</strong> Корінь виділено контрастним кольором, додано ілюстрації-підказки лексичного значення, збільшено міжрядковий інтервал та кегль.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-white border border-[#D4E3F0]">
+                                <div class="text-xs font-extrabold uppercase text-stone-400 mb-2.5">Рядок 1 (поміркуй за малюнками):</div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    ${row1Words.map(w => `
+                                        <div class="p-3 rounded-xl border ${w.isOdd ? 'border-amber-300 bg-amber-50/40' : 'border-emerald-200 bg-emerald-50/30'} text-center">
+                                            <div class="text-3xl mb-1">${w.emoji}</div>
+                                            <div class="text-lg font-extrabold text-stone-900">
+                                                <span class="underline decoration-2 ${w.isOdd ? 'text-amber-700 decoration-amber-500' : 'text-emerald-700 decoration-emerald-500'}">${w.root}</span>${w.suffix}
+                                            </div>
+                                            <div class="text-xs text-stone-500 mt-1">${w.hint}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white border border-[#D4E3F0]">
+                                <div class="text-xs font-extrabold uppercase text-stone-400 mb-2.5">Рядок 2 (порівняй значення слів):</div>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    ${row2Words.map(w => `
+                                        <div class="p-3 rounded-xl border ${w.isOdd ? 'border-amber-300 bg-amber-50/40' : 'border-emerald-200 bg-emerald-50/30'} text-center">
+                                            <div class="text-3xl mb-1">${w.emoji}</div>
+                                            <div class="text-lg font-extrabold text-stone-900">
+                                                <span class="underline decoration-2 ${w.isOdd ? 'text-amber-700 decoration-amber-500' : 'text-emerald-700 decoration-emerald-500'}">${w.root}</span>${w.suffix}
+                                            </div>
+                                            <div class="text-xs text-stone-500 mt-1">${w.hint}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                panelHtml = `
+                    <div class="p-5 sm:p-6 rounded-2xl bg-[#EBF3EE]/75 border border-[#C6D9CD] soft-panel">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-[#DCE8E0] text-[#2F4A39] text-xs font-extrabold">Рівень 3: Інтерактивний тренажер (натисни та перевір)</span>
+                            <button onclick="resetOddWordExercise()" class="text-xs font-bold text-[#355240] hover:underline">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Почати спочатку
+                            </button>
+                        </div>
+                        <p class="text-stone-700 text-sm sm:text-base mb-4">
+                            <strong>Для учнів із труднощами письма або для роботи на планшеті/дошці:</strong> натисни на <strong>зайве слово</strong> у кожному рядку та прослухай підтримувальну підказку вчителя:
+                        </p>
+
+                        <!-- Завдання 1 -->
+                        <div class="p-4 rounded-2xl bg-white border border-[#D4E2D9] mb-4">
+                            <div class="text-xs font-extrabold text-stone-500 uppercase mb-2.5">Завдання 1. Обери зайве слово в ряду:</div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                ${row1Words.map(w => {
+                                    const isChosen = appState.selectedRow1 && appState.selectedRow1.word === w.word;
+                                    let btnStyle = 'border-stone-200 bg-[#FAF8F5] hover:border-[#6B8E78] text-stone-900';
+                                    if (isChosen) {
+                                        btnStyle = w.isOdd
+                                            ? 'border-emerald-600 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-200'
+                                            : 'border-amber-500 bg-amber-50 text-amber-950';
+                                    }
+                                    return `
+                                        <button onclick="checkOddWord(1, '${w.word}', ${w.isOdd}, '${w.msg.replace(/'/g, "\\'")}')"
+                                            class="p-3 rounded-xl border-2 font-bold text-base flex flex-col items-center gap-1 transition ${btnStyle}">
+                                            <span class="text-2xl">${w.emoji}</span>
+                                            <span>${w.word}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+                            ${appState.selectedRow1 ? `
+                                <div class="mt-3 p-3 rounded-xl text-sm font-bold flex items-center gap-2.5 ${appState.selectedRow1.isOdd ? 'bg-emerald-100/80 text-emerald-950' : 'bg-amber-100/80 text-amber-950'}">
+                                    <i class="fa-solid ${appState.selectedRow1.isOdd ? 'fa-circle-check text-emerald-700' : 'fa-circle-info text-amber-700'} text-lg"></i>
+                                    <span>${appState.selectedRow1.explanation}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- Завдання 2 -->
+                        <div class="p-4 rounded-2xl bg-white border border-[#D4E2D9]">
+                            <div class="text-xs font-extrabold text-stone-500 uppercase mb-2.5">Завдання 2. Обери зайве слово в ряду:</div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                                ${row2Words.map(w => {
+                                    const isChosen = appState.selectedRow2 && appState.selectedRow2.word === w.word;
+                                    let btnStyle = 'border-stone-200 bg-[#FAF8F5] hover:border-[#6B8E78] text-stone-900';
+                                    if (isChosen) {
+                                        btnStyle = w.isOdd
+                                            ? 'border-emerald-600 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-200'
+                                            : 'border-amber-500 bg-amber-50 text-amber-950';
+                                    }
+                                    return `
+                                        <button onclick="checkOddWord(2, '${w.word}', ${w.isOdd}, '${w.msg.replace(/'/g, "\\'")}')"
+                                            class="p-3 rounded-xl border-2 font-bold text-base flex flex-col items-center gap-1 transition ${btnStyle}">
+                                            <span class="text-2xl">${w.emoji}</span>
+                                            <span>${w.word}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+                            ${appState.selectedRow2 ? `
+                                <div class="mt-3 p-3 rounded-xl text-sm font-bold flex items-center gap-2.5 ${appState.selectedRow2.isOdd ? 'bg-emerald-100/80 text-emerald-950' : 'bg-amber-100/80 text-amber-950'}">
+                                    <i class="fa-solid ${appState.selectedRow2.isOdd ? 'fa-circle-check text-emerald-700' : 'fa-circle-info text-amber-700'} text-lg"></i>
+                                    <span>${appState.selectedRow2.explanation}</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-[#EFECE6]">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-[#F5E6C8] text-[#6E4D19] mb-2">
+                            <i class="fa-solid fa-spell-check"></i> Виклик 2 • Українська мова (3 клас НУШ)
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-stone-900">Тема: «Спільнокореневі слова та форми слова»</h2>
+                        <p class="text-stone-600 text-sm sm:text-base mt-1">Одна навчальна мета для всього класу — 3 рівноцінні способи доступу до інформації та виконання:</p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 bg-[#F5F2EC] p-1.5 rounded-2xl self-start lg:self-center">
+                        <button onclick="setUdlLevel('basic')" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${appState.udlLevel === 'basic' ? 'bg-white text-[#6E4D19] shadow-2xs' : 'text-stone-600 hover:text-stone-900'}">
+                            1. Базовий рівень
+                        </button>
+                        <button onclick="setUdlLevel('visual')" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${appState.udlLevel === 'visual' ? 'bg-white text-[#2C4E6E] shadow-2xs' : 'text-stone-600 hover:text-stone-900'}">
+                            2. Візуально-опорний
+                        </button>
+                        <button onclick="setUdlLevel('interactive')" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition ${appState.udlLevel === 'interactive' ? 'bg-white text-[#2F4A39] shadow-2xs' : 'text-stone-600 hover:text-stone-900'}">
+                            3. Інтерактивний тренажер
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    ${panelHtml}
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // ВИКЛИК 3: АЛГОРИТМ ВИРІШЕННЯ ПРОБЛЕМНОЇ СИТУАЦІЇ
+        // ==========================================
+        const crisisSteps = [
+            {
+                num: 1,
+                title: "Емоційна стабілізація вчителя та стоп-сигнал",
+                icon: "fa-spa",
+                desc: "Учитель зберігає спокій, знижує гучність голосу до тихого, рівного тону, не сварить Марка за скинуті картки та не робить публічних зауважень іншим дітям. Внутрішня стабільність педагога зупиняє ескалацію афекту."
+            },
+            {
+                num: 2,
+                title: "Забезпечення фізичної та сенсорної безпеки",
+                icon: "fa-shield-heart",
+                desc: "Учитель робить умовний жест «тиша» для класу, вимикає звуковий таймер на інтерактивній дошці та м'яко прибирає зі столу предмети, якими можна травмуватися, не намагаючись силоміць утримувати дитину."
+            },
+            {
+                num: 3,
+                title: "Супровід асистентом у «Зону тиші»",
+                icon: "fa-person-walking-arrow-right",
+                desc: "Асистент учителя за попереднім алгоритмом спокійно супроводжує Марка у відокремлений антистрес-куточок тиші, пропонує шумопоглинаючі навушники й улюблений тактильний м'ячик, поки вчитель перемикає увагу решти класу на спокійне письмове завдання."
+            },
+            {
+                num: 4,
+                title: "Відновлення дихання та безсловесна комунікація",
+                icon: "fa-wind",
+                desc: "Після 3–5 хвилин тиші асистент пропонує дихальну вправу «Квадратне дихання» і картки комунікації («Мені було занадто гучно», «Я хочу побути сам», «Я готовий повернутися»), поважаючи вибір учня."
+            },
+            {
+                num: 5,
+                title: "Індивідуальне завершення завдання у комфортному форматі",
+                icon: "fa-puzzle-piece",
+                desc: "Коли Марко заспокоївся, він завершує завдання у власному спокійному темпі (на планшеті або окремій картці без галасу), отримуючи відчуття ситуації успіху."
+            },
+            {
+                num: 6,
+                title: "Відновлювальне коло емпатії з класом",
+                icon: "fa-people-group",
+                desc: "Наприкінці дня вчитель проводить коротку тактовну бесіду з 3 класом без стигматизації: «Коли в класі стає надто гучно, наш мозок може перевтомлюватися. Марку сьогодні знадобилася пауза в куточку тиші — це нормально. Як ми можемо берегти тишу під час групової роботи?»."
+            }
+        ];
+
+        function setCrisisStepIdx(idx) {
+            appState.crisisStepIndex = idx;
+            renderChallengeStage();
+        }
+
+        function buildChallenge3() {
+            const current = crisisSteps[appState.crisisStepIndex];
+            const progressPercent = ((appState.crisisStepIndex + 1) / crisisSteps.length) * 100;
+
+            return `
+                <div class="pb-6 border-b border-[#EFECE6]">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-[#DCEAF5] text-[#2C4E6E] mb-2">
+                        <i class="fa-solid fa-hand-holding-heart"></i> Виклик 3 • Педагогічний алгоритм (3 клас)
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-900">Алгоритм вирішення проблемної ситуації в 3 класі</h2>
+                    <div class="mt-3 p-4 rounded-2xl bg-[#EBF3F9]/80 border border-[#C5DCEF] text-sm sm:text-base text-stone-800 soft-panel">
+                        <strong>Модельована ситуація (3-Б клас):</strong> Під час динамічного групового мовного квесту з таймером у класі здіймається гучний галас. У Марка (учня з РАС та сенсорною чутливістю) виникає сенсорне перевантаження: він затуляє вуха, кричить, скидає картки на підлогу, а однокласники в групі розгублюються і починають сваритися через втрачені бали.
+                    </div>
+                </div>
+
+                <!-- Візуальний прогрес-бар кроків -->
+                <div class="mt-6">
+                    <div class="flex items-center justify-between text-xs font-extrabold text-stone-500 mb-2">
+                        <span>Покроковий алгоритм педагогічних дій</span>
+                        <span class="text-[#45729B]">Крок ${current.num} із ${crisisSteps.length}</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-[#EFECE6] rounded-full overflow-hidden mb-5">
+                        <div class="h-full bg-[#6B9AC4] transition-all duration-300 rounded-full" style="width: ${progressPercent}%"></div>
+                    </div>
+
+                    <!-- Кнопки 6 кроків -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-6">
+                        ${crisisSteps.map((st, idx) => {
+                            const isCurrent = appState.crisisStepIndex === idx;
+                            const isDone = idx < appState.crisisStepIndex;
+                            return `
+                                <button onclick="setCrisisStepIdx(${idx})"
+                                    class="p-3 rounded-2xl border-2 text-left transition flex flex-col justify-between ${
+                                        isCurrent
+                                        ? 'border-[#6B9AC4] bg-[#EBF3F9] shadow-2xs'
+                                        : isDone
+                                        ? 'border-[#87A994] bg-[#EBF3EE]/60 text-stone-800'
+                                        : 'border-[#E6E0D6] bg-white hover:border-[#A9C6DF] text-stone-600'
+                                    }">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-xs font-extrabold uppercase ${isCurrent ? 'text-[#2C4E6E]' : isDone ? 'text-[#355240]' : 'text-stone-400'}">
+                                            Крок ${st.num}
+                                        </span>
+                                        ${isDone ? '<i class="fa-solid fa-circle-check text-[#4D6E59] text-xs"></i>' : ''}
+                                    </div>
+                                    <span class="text-xs font-bold text-stone-900 leading-snug line-clamp-2">${st.title}</span>
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Картка активного кроку -->
+                    <div class="p-6 rounded-3xl bg-white border-2 border-[#B3CFE6] shadow-2xs flex flex-col sm:flex-row items-start gap-5 soft-panel">
+                        <div class="w-14 h-14 rounded-2xl bg-[#DCEAF5] text-[#2C4E6E] flex items-center justify-center text-2xl shrink-0">
+                            <i class="fa-solid ${current.icon}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-[#6B9AC4] text-white text-xs font-extrabold">Крок ${current.num} із 6</span>
+                            <h3 class="text-lg sm:text-xl font-extrabold text-stone-900 mt-2">${current.title}</h3>
+                            <p class="text-stone-700 text-sm sm:text-base mt-2 leading-relaxed">${current.desc}</p>
+
+                            <div class="mt-5 flex flex-wrap items-center gap-3">
+                                <button onclick="setCrisisStepIdx(${Math.max(0, appState.crisisStepIndex - 1)})"
+                                    ${appState.crisisStepIndex === 0 ? 'disabled' : ''}
+                                    class="px-4 py-2 rounded-xl border border-stone-200 text-xs sm:text-sm font-bold text-stone-700 disabled:opacity-40 hover:bg-stone-50">
+                                    <i class="fa-solid fa-chevron-left mr-1"></i> Попередній крок
+                                </button>
+                                <button onclick="setCrisisStepIdx(${Math.min(crisisSteps.length - 1, appState.crisisStepIndex + 1)})"
+                                    ${appState.crisisStepIndex === crisisSteps.length - 1 ? 'disabled' : ''}
+                                    class="px-4 py-2 rounded-xl bg-[#6B9AC4] hover:bg-[#5684AD] text-white text-xs sm:text-sm font-bold disabled:opacity-40">
+                                    Наступний крок <i class="fa-solid fa-chevron-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // ВИКЛИК 4: КОМАНДА ПСИХОЛОГО-ПЕДАГОГІЧНОГО СУПРОВОДУ
+        // ==========================================
+        const supportTeamMap = {
+            teacher: {
+                title: "Учитель 3 класу",
+                icon: "fa-chalkboard-user",
+                tag: "Координатор навчання та інклюзивного середовища",
+                roleDesc: [
+                    "Планує уроки за принципами UDL, забезпечуючи доступність навчального матеріалу для всіх учнів 3 класу.",
+                    "Визначає освітні цілі в межах ІПР та адаптує критерії формувального оцінювання.",
+                    "Формує атмосферу взаємоповаги в класі та координує спільне викладання з асистентом учителя."
+                ],
+                tools: "Інструменти: картки-алгоритми, диференційовані завдання, щоденник спостережень, ранкові кола.",
+                freq: "Частота комунікації: щоденна оперативна взаємодія з асистентом і батьками; засідання команди супроводу — 3 рази на рік."
+            },
+            assistant: {
+                title: "Асистент учителя",
+                icon: "fa-hands-holding-child",
+                tag: "Партнер у класі та провідник підтримки",
+                roleDesc: [
+                    "Допомагає учневі з ООП організувати робоче місце, утримувати увагу та дотримуватися візуального розкладу уроку.",
+                    "Виготовляє візуальні опори, розрізні картки, підказки та допомагає адаптувати темп виконання вправ.",
+                    "Супроводжує дитину в антистрес-куточок тиші при перших ознаках перевтоми або тривоги."
+                ],
+                tools: "Інструменти: візуальний розклад, картки-підказки, таймер-пісочний годинник, чек-лист активності.",
+                freq: "Частота комунікації: щоденне обговорення перед і після уроків, щотижневе спільне планування (20 хв)."
+            },
+            parents: {
+                title: "Батьки учня 3 класу",
+                icon: "fa-house-chimney-user",
+                tag: "Рівноправні партнери та експерти своєї дитини",
+                roleDesc: [
+                    "Діляться знаннями про інтереси, сильні сторони, сенсорні особливості та ефективні способи заспокоєння дитини.",
+                    "Беруть участь у розробленні, підписанні та перегляді Індивідуальної програми розвитку (ІПР).",
+                    "Підтримують узгоджені з учителем правила та ритуали саморегуляції вдома."
+                ],
+                tools: "Інструменти: «Зошит позитивних досягнень», короткі індивідуальні зустрічі, спільний чат підтримки.",
+                freq: "Частота комунікації: короткий позитивний зворотний зв'язок 2–3 рази на тиждень, планові зустрічі щомісяця."
+            },
+            psychologist: {
+                title: "Практичний психолог",
+                icon: "fa-brain",
+                tag: "Емоційна регуляція та соціалізація",
+                roleDesc: [
+                    "Проводить корекційно-розвиткові заняття з розвитку емоційного інтелекту, саморегуляції та зниження тривожності.",
+                    "Допомагає вчителю розробити поведінкові стратегії (робота з «Термометром емоцій», техніки заспокоєння).",
+                    "Проводить профілактичні заняття з учнями 3 класу для формування емпатії та згуртованості."
+                ],
+                tools: "Інструменти: арттерапія, ігрові тренінги емпатії, картки емоцій, індивідуальний профіль підтримки.",
+                freq: "Частота комунікації: щотижневі корекційні заняття з дитиною та регулярні консультації для вчителя і батьків."
+            },
+            speech: {
+                title: "Логопед / Корекційний педагог",
+                icon: "fa-comments",
+                tag: "Розвиток мовлення, читання та пізнавальних процесів",
+                roleDesc: [
+                    "Працює над розвитком зв'язного мовлення, фонематичного сприймання, подоланням труднощів читання (дислексії) та письма (дисграфії).",
+                    "Надає вчителю рекомендації щодо спрощення інструкцій та візуального оформлення мовних вправ (виділення кореня, складів).",
+                    "Синхронізує лексичні та граматичні теми корекційних занять із програмою української мови 3 класу."
+                ],
+                tools: "Інструменти: складові таблиці, логопедичні тренажери, візуальні схеми будови слова.",
+                freq: "Частота комунікації: 2 рази на тиждень корекційні заняття, обмін рекомендаціями з учителем раз на два тижні."
+            }
+        };
+
+        function setSelectedMember(key) {
+            appState.selectedMember = key;
+            renderChallengeStage();
+        }
+
+        function buildChallenge4() {
+            const m = supportTeamMap[appState.selectedMember];
+
+            return `
+                <div class="pb-6 border-b border-[#EFECE6]">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-[#E5DFF2] text-[#44366B] mb-2">
+                        <i class="fa-solid fa-people-arrows"></i> Виклик 4 • Командна взаємодія (3 клас)
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-900">Команда психолого-педагогічного супроводу</h2>
+                    <p class="text-stone-600 text-sm sm:text-base mt-1">Натисніть на будь-якого учасника навколо учнів 3 класу, щоб побачити його роль, інструменти та частоту комунікації:</p>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Схема-мапа учасників -->
+                    <div class="lg:col-span-5 bg-[#F2EFF8]/70 rounded-3xl p-5 border border-[#DFD8EE] soft-panel">
+                        <div class="px-4 py-3.5 rounded-2xl bg-gradient-to-r from-[#7C69AF] to-[#9885C9] text-white font-extrabold text-center shadow-2xs mb-4">
+                            <i class="fa-solid fa-child-reaching mr-1.5"></i> УЧНІ 3-Б КЛАСУ З ООП (Марко, Софійка, Данилко)
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            ${Object.entries(supportTeamMap).map(([key, item]) => {
+                                const active = appState.selectedMember === key;
+                                return `
+                                    <button onclick="setSelectedMember('${key}')"
+                                        class="p-3.5 rounded-2xl border-2 text-left transition flex items-center gap-3 ${
+                                            active
+                                            ? 'bg-white border-[#7C69AF] shadow-2xs scale-[1.01]'
+                                            : 'bg-white/85 border-[#E6E0D6] hover:border-[#B6A9D6]'
+                                        }">
+                                        <div class="w-10 h-10 rounded-xl shrink-0 flex items-center justify-center text-base ${active ? 'bg-[#7C69AF] text-white' : 'bg-[#EAE4F5] text-[#5B498A]'}">
+                                            <i class="fa-solid ${item.icon}"></i>
+                                        </div>
+                                        <span class="font-bold text-stone-900 text-xs sm:text-sm leading-tight">${item.title}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Картка обраного учасника -->
+                    <div class="lg:col-span-7 p-6 rounded-3xl bg-white border-2 border-[#D4C9EB] shadow-2xs soft-panel">
+                        <div class="flex items-center gap-3.5 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-[#EAE4F5] text-[#5B498A] flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid ${m.icon}"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-[#635294]">${m.tag}</span>
+                                <h3 class="text-xl font-extrabold text-stone-900">${m.title}</h3>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-2.5 mb-5">
+                            ${m.roleDesc.map(line => `
+                                <li class="flex items-start gap-2.5 text-stone-700 text-sm sm:text-base">
+                                    <i class="fa-solid fa-circle-check text-[#7C69AF] mt-1 shrink-0"></i>
+                                    <span>${line}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+
+                        <div class="space-y-2 pt-3 border-t border-[#EFECE6] text-xs sm:text-sm">
+                            <div class="p-3 rounded-xl bg-[#FAF8F5] text-stone-800 font-semibold">
+                                <i class="fa-solid fa-toolbox text-[#7C69AF] mr-1.5"></i> ${m.tools}
+                            </div>
+                            <div class="p-3 rounded-xl bg-[#F2EFF8]/70 text-[#3F3163] font-semibold">
+                                <i class="fa-regular fa-clock text-[#7C69AF] mr-1.5"></i> ${m.freq}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Матриця розподілу ролей на уроці (Тандем: Учитель + Асистент) -->
+                <div class="mt-6 p-5 rounded-3xl bg-[#FAF8F5] border border-[#E6E0D6] soft-panel">
+                    <h3 class="font-extrabold text-stone-900 text-sm sm:text-base mb-3">
+                        <i class="fa-solid fa-table-columns text-[#7C69AF] mr-1.5"></i> Матриця оперативної взаємодії на уроці у 3 класі (Командне викладання):
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm">
+                        <div class="p-3.5 rounded-2xl bg-white border border-[#E6E0D6]">
+                            <div class="font-extrabold text-[#5B498A] mb-1">1. Початок уроку (5 хв)</div>
+                            <p class="text-stone-700"><strong>Учитель:</strong> проводить ранкове коло, оголошує тему.<br><strong>Асистент:</strong> оновлює візуальний розклад для Марка, перевіряє готовність карток Софійки й Данилка.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-[#E6E0D6]">
+                            <div class="font-extrabold text-[#5B498A] mb-1">2. Основна частина (25 хв)</div>
+                            <p class="text-stone-700"><strong>Учитель:</strong> пояснює новий матеріал мультимодально, фасилітує групи.<br><strong>Асистент:</strong> допомагає Данилку тримати крок алгоритму, надає аудіопідтримку Софійці.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-[#E6E0D6]">
+                            <div class="font-extrabold text-[#5B498A] mb-1">3. Підсумок і рефлексія (10 хв)</div>
+                            <p class="text-stone-700"><strong>Учитель:</strong> фіксує формувальний зворотний зв'язок.<br><strong>Асистент:</strong> допомагає учням заповнити «Сходинки росту» та робить коротку нотатку успіху для батьків.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // ВИКЛИК 5: ОЦІНЮВАННЯ ІНДИВІДУАЛЬНОГО ПРОГРЕСУ
+        // ==========================================
+        function setStudentProfile(profileKey) {
+            appState.selectedStudentProfile = profileKey;
+            renderChallengeStage();
+        }
+
+        function setGrowthStep(stepNum) {
+            appState.growthStep = stepNum;
+            renderChallengeStage();
+        }
+
+        function buildChallenge5() {
+            const studentIepTargets = {
+                marko: {
+                    name: "Марко (РАС, ІІ рівень підтримки)",
+                    standardGoal: "Загальний результат 3 класу: розрізняє спільнокореневі слова та форми слова, пояснює лексичне значення.",
+                    adaptedGoal: "Адаптований очікуваний результат ІПР: групує спільнокореневі слова за візуально-смисловою схемою (4–6 слів) без часового тиску, самостійно користується карткою-алгоритмом.",
+                    methods: "Спосіб оцінювання: інтерактивний тренажер / картки-жетони на планшеті, чек-лист самостійності кроків, фіксація емоційної стабільності."
+                },
+                sofiika: {
+                    name: "Софійка (Дислексія, ІІ рівень підтримки)",
+                    standardGoal: "Загальний результат 3 класу: читає мовчки та вголос, списує слова, визначає та позначає корінь слова.",
+                    adaptedGoal: "Адаптований очікуваний результат ІПР: визначає корінь у словах із кольоровим кодуванням та збільшеним шрифтом (18 pt), дає усну відповідь або обирає варіант замість великого обсягу списування.",
+                    methods: "Спосіб оцінювання: усне обґрунтування вибору, оцінювання змісту відповіді без зниження результату за темп читання чи пропуски літер."
+                },
+                danylko: {
+                    name: "Данилко (Інтелектуальні труднощі + СДУГ, ІІІ рівень підтримки)",
+                    standardGoal: "Загальний результат 3 класу: добирає споріднені слова до поданого слова та будує з ними речення.",
+                    adaptedGoal: "Модифікований очікуваний результат ІПР: знаходить «зайве» слово з ряду із 3–4 слів за малюнками-підказками та покроковою опорою асистента (блоками по 5–7 хвилин).",
+                    methods: "Спосіб оцінювання: спостереження за практичною дією, жетонна система маленьких перемог, порівняння динаміки виконання кроків."
+                }
+            };
+
+            const activeIep = studentIepTargets[appState.selectedStudentProfile];
+
+            const portfolioComparison = {
+                1: {
+                    label: "Сходинка 1: «Потребую підказки та підтримки»",
+                    sem1: "І семестр (жовтень): Учень виконує вправу зі спільнокореневими словами лише з покроковою допомогою асистента та візуальними картинками (2 із 4 слів).",
+                    sem2: "ІІ семестр (березень): Дитина впевнено користується кольоровою пам'яткою кореня і самостійно знаходить 3 із 4 спільнокореневих слів.",
+                    note: "У «Портфоліо успіху» фіксуємо сам факт опанування алгоритму дій без страху помилитися."
+                },
+                2: {
+                    label: "Сходинка 2: «Працюю впевнено за алгоритмом»",
+                    sem1: "І семестр (листопад): Списує 2 речення зі збільшеним шрифтом із 3 помилками, швидко втомлюється.",
+                    sem2: "ІІ семестр (квітень): Самостійно позначає корінь у 6 словах за карткою-алгоритмом, працює спокійно та звертається по допомогу за потреби.",
+                    note: "У «Портфоліо успіху» зберігаємо обидві картки поруч — дитина та батьки наочно бачать власний ріст!"
+                },
+                3: {
+                    label: "Сходинка 3: «Можу пояснити та допомогти другу»",
+                    sem1: "І семестр (грудень): Уникає роботи в парі через хвилювання та невпевненість у відповіді.",
+                    sem2: "ІІ семестр (травень): Із задоволенням презентує власну мінікнижечку «Сім'я слів» у малій групі та отримує оплески класу.",
+                    note: "У «Портфоліо успіху» додаємо фото творчого проєкту та аркуш самооцінки учня."
+                }
+            };
+
+            const currentGrowth = portfolioComparison[appState.growthStep];
+
+            return `
+                <div class="pb-6 border-b border-[#EFECE6]">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-[#F2DADA] text-[#6E3232] mb-2">
+                        <i class="fa-solid fa-stairs"></i> Виклик 5 • Оцінювання прогресу (3 клас НУШ)
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-stone-900">Оцінювання індивідуального прогресу учнів 3 класу</h2>
+                    <p class="text-stone-600 text-sm sm:text-base mt-1">У 3 класі НУШ ми узгоджуємо оцінювання з індивідуальними можливостями, потребами та очікуваними результатами ІПР, порівнюючи дитину <strong>лише з нею самою вчорашньою</strong>.</p>
+                </div>
+
+                <!-- 1. Інтерактивний перегляд адаптованих очікуваних результатів ІПР -->
+                <div class="mt-6">
+                    <div class="p-5 rounded-3xl bg-[#FAF8F5] border border-[#E6E0D6] mb-6 soft-panel">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                            <h3 class="font-extrabold text-stone-900 text-base sm:text-lg">
+                                1. Узгодження очікуваних результатів навчання з можливостями учня (ІПР):
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="setStudentProfile('marko')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition ${appState.selectedStudentProfile === 'marko' ? 'bg-[#6B9AC4] text-white border-[#6B9AC4]' : 'bg-white text-stone-700 border-stone-200 hover:border-[#6B9AC4]'}">
+                                    Марко (РАС)
+                                </button>
+                                <button onclick="setStudentProfile('sofiika')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition ${appState.selectedStudentProfile === 'sofiika' ? 'bg-[#D4A359] text-white border-[#D4A359]' : 'bg-white text-stone-700 border-stone-200 hover:border-[#D4A359]'}">
+                                    Софійка (Дислексія)
+                                </button>
+                                <button onclick="setStudentProfile('danylko')" class="px-3 py-1.5 rounded-xl text-xs font-extrabold border transition ${appState.selectedStudentProfile === 'danylko' ? 'bg-[#6B8E78] text-white border-[#6B8E78]' : 'bg-white text-stone-700 border-stone-200 hover:border-[#6B8E78]'}">
+                                    Данилко (СДУГ)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-white border border-[#E6E0D6] space-y-2.5 text-xs sm:text-sm">
+                            <div class="font-extrabold text-stone-900 text-sm sm:text-base">${activeIep.name}</div>
+                            <p class="text-stone-600"><i class="fa-solid fa-bullseye text-stone-400 mr-1.5"></i> ${activeIep.standardGoal}</p>
+                            <p class="text-[#2F4A39] font-semibold bg-[#EBF3EE]/70 p-2.5 rounded-xl"><i class="fa-solid fa-check-double text-[#4D6E59] mr-1.5"></i> ${activeIep.adaptedGoal}</p>
+                            <p class="text-stone-700 font-medium"><i class="fa-solid fa-clipboard-check text-[#994C4C] mr-1.5"></i> ${activeIep.methods}</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Дескриптори Свідоцтва досягнень НУШ (3 клас) -->
+                    <h3 class="font-bold text-stone-900 text-base sm:text-lg mb-3">
+                        2. Адаптовані дескриптори Свідоцтва досягнень НУШ (3 клас):
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="p-4 rounded-2xl bg-[#EBF3EE] border border-[#C6D9CD] soft-panel">
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-[#6B8E78] text-white text-xs font-extrabold mb-2">Має значні успіхи</span>
+                            <p class="text-stone-700 text-sm leading-relaxed">
+                                Учень самостійно застосовує опанований спосіб дії (наприклад, знаходить спільний корінь за візуальною опорою) та впевнено виконує адаптовані завдання.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-[#FBF3E4] border border-[#E8D5B0] soft-panel">
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-[#D4A359] text-white text-xs font-extrabold mb-2">Демонструє помітний прогрес</span>
+                            <p class="text-stone-700 text-sm leading-relaxed">
+                                Порівняно з початком семестру дитина виконує більший обсяг роботи, рідше потребує нагадувань та успішно користується карткою-алгоритмом.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-[#EBF3F9] border border-[#C5DCEF] soft-panel">
+                            <span class="inline-block px-2.5 py-0.5 rounded-md bg-[#6B9AC4] text-white text-xs font-extrabold mb-2">Потребує уваги і допомоги</span>
+                            <p class="text-stone-700 text-sm leading-relaxed">
+                                Навичка перебуває на етапі формування; сигнал для команди супроводу змінити спосіб подачі матеріалу або зменшити крок завдання (без негативної оцінки).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Інтерактивні «Сходинки росту» + «Портфоліо успіху» -->
+                    <div class="p-5 sm:p-6 rounded-3xl bg-[#F9ECEC]/70 border border-[#E6C7C7] soft-panel">
+                        <h3 class="font-bold text-stone-900 text-base sm:text-lg mb-1">
+                            3. Інтерактивна картка самооцінювання «Сходинки росту» та «Портфоліо успіху»
+                        </h3>
+                        <p class="text-stone-600 text-sm mb-4">
+                            Натисніть на сходинку, яку обирає третьокласник наприкінці теми, щоб побачити приклад фіксації прогресу за <strong>І та ІІ семестр</strong>:
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                            <button onclick="setGrowthStep(1)"
+                                class="p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 ${appState.growthStep === 1 ? 'bg-white border-[#C97B7B] shadow-2xs' : 'bg-white/75 border-[#E6E0D6] hover:border-[#D9A7A7]'}">
+                                <span class="w-9 h-9 rounded-xl bg-[#F2DADA] text-[#6E3232] font-extrabold flex items-center justify-center shrink-0">1</span>
+                                <span class="font-bold text-stone-900 text-sm">Сходинка 1: Потребую підказки</span>
+                            </button>
+
+                            <button onclick="setGrowthStep(2)"
+                                class="p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 ${appState.growthStep === 2 ? 'bg-white border-[#C97B7B] shadow-2xs' : 'bg-white/75 border-[#E6E0D6] hover:border-[#D9A7A7]'}">
+                                <span class="w-9 h-9 rounded-xl bg-[#F5E6C8] text-[#6E4D19] font-extrabold flex items-center justify-center shrink-0">2</span>
+                                <span class="font-bold text-stone-900 text-sm">Сходинка 2: Працюю за алгоритмом</span>
+                            </button>
+
+                            <button onclick="setGrowthStep(3)"
+                                class="p-4 rounded-2xl border-2 text-left transition flex items-center gap-3 ${appState.growthStep === 3 ? 'bg-white border-[#C97B7B] shadow-2xs' : 'bg-white/75 border-[#E6E0D6] hover:border-[#D9A7A7]'}">
+                                <span class="w-9 h-9 rounded-xl bg-[#DCE8E0] text-[#2F4A39] font-extrabold flex items-center justify-center shrink-0">3</span>
+                                <span class="font-bold text-stone-900 text-sm">Сходинка 3: Можу пояснити другу</span>
+                            </button>
+                        </div>
+
+                        <!-- Порівняння І та ІІ семестру у Портфоліо успіху -->
+                        <div class="p-5 rounded-2xl bg-white border border-[#E6C7C7]">
+                            <div class="font-extrabold text-[#6E3232] text-sm sm:text-base mb-3">
+                                <i class="fa-solid fa-folder-open mr-1.5"></i> Запис у «Портфоліо успіху» учня 3 класу — ${currentGrowth.label}
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                <div class="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E8E2D9] text-sm text-stone-700">
+                                    <span class="block text-xs font-extrabold uppercase text-stone-400 mb-1">Точка старту</span>
+                                    ${currentGrowth.sem1}
+                                </div>
+                                <div class="p-3.5 rounded-xl bg-[#EBF3EE]/70 border border-[#C6D9CD] text-sm text-stone-800 font-medium">
+                                    <span class="block text-xs font-extrabold uppercase text-[#355240] mb-1">Динаміка зростання</span>
+                                    ${currentGrowth.sem2}
+                                </div>
+                            </div>
+                            <p class="text-xs sm:text-sm font-semibold text-stone-600">
+                                <i class="fa-solid fa-star text-[#D4A359] mr-1"></i> ${currentGrowth.note}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
